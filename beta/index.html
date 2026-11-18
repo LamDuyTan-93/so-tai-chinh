@@ -150,6 +150,10 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
 .amount input{width:2.2ch;max-width:86%;border:0;background:none;text-align:center;font-size:42px;font-weight:800;letter-spacing:-1px;outline:none;font-variant-numeric:tabular-nums}
 .amount.chi input{color:var(--chi)}.amount.thu input{color:var(--thu)}
 .amount span{font-size:24px;font-weight:700;color:var(--mu)}
+.chu{text-align:center;font-size:15px;font-weight:600;color:var(--mu);margin:-2px 0 10px;min-height:20px}
+.chu.co{color:var(--pri)}
+.nhanh{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
+.nhanh button{background:var(--card);border-radius:12px;padding:8px 16px;font-weight:700;font-size:15px;box-shadow:var(--shadow)}
 .lbl{font-size:13px;font-weight:700;color:var(--mu);margin:4px 4px 8px;text-transform:uppercase;letter-spacing:.2px}
 .cats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 4px;margin-bottom:14px}
 .cat{display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 2px;border-radius:14px}
@@ -246,7 +250,7 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
    ===================================================================== */
 const BETA = /\/beta\//.test(location.pathname);       // bản thử nghiệm chạy ở thư mục /beta/
 const PF = BETA ? 'stcb_' : 'stc_';                         // tách bộ nhớ trên máy giữa bản chính và bản beta
-const PHIEN_BAN = '2.1' + (BETA ? '-beta' : '');
+const PHIEN_BAN = '2.2' + (BETA ? '-beta' : '');
 const SVG_MIC = '<svg class="i" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></svg>';
 
 // ---------- Hằng số ----------
@@ -369,7 +373,8 @@ function timSoTien(s) {
   }
   return {v:Math.round(v), i:t.i, j};
 }
-const docSoTien = str => (timSoTien(chuanChuoi(str)) || {}).v || 0;
+// Ô số tiền: chỉ có chữ số → lấy đúng con số đã gõ; có chữ (45k, 1tr2) → hiểu theo cách nói tắt
+const docSoTien = str => /^[\d.\s]*$/.test(String(str || '')) ? +String(str || '').replace(/\D/g, '') || 0 : (timSoTien(chuanChuoi(str)) || {}).v || 0;
 function khopTuKhoa(sach, ten, tuKhoa) {
   let dai = 0;
   [ten, ...String(tuKhoa || '').split(',')].map(x => x.trim().toLowerCase()).filter(Boolean)
@@ -528,7 +533,7 @@ function oNhap(f, val) {
     const o = (typeof f.o === 'function' ? f.o() : f.o).map(x => Array.isArray(x) ? x : [x, x]);
     inp = `<select id="${id}">${o.map(([a, b]) => `<option value="${esc(a)}"${String(a) === String(val) ? ' selected' : ''}>${esc(b)}</option>`).join('')}</select>`;
   } else if (f.t === 'money') {
-    inp = `<input id="${id}" inputmode="decimal" autocomplete="off" value="${val ? fmt(val) : ''}" placeholder="0 đ" onblur="this.value=docSoTien(this.value)?fmt(docSoTien(this.value)):''">`;
+    inp = `<input id="${id}" inputmode="numeric" autocomplete="off" value="${val ? fmt(val) : ''}" placeholder="0 đ" oninput="goSo(this)" onblur="this.value=docSoTien(this.value)?fmt(docSoTien(this.value)):''">`;
   } else {
     inp = `<input id="${id}" type="${f.t === 'date' ? 'date' : 'text'}" ${f.t === 'number' ? 'inputmode="decimal"' : ''} autocomplete="off" value="${esc(val)}" placeholder="${esc(f.ph || '')}">`;
   }
@@ -714,8 +719,10 @@ function veFormGD(vTxt) {
   if (Gmoi) h += `<div class="vbox"><button class="mic ${REC ? 'rec' : ''}" id="micBtn" onclick="nghe()" aria-label="Nói">${SVG_MIC}</button>
     <div class="vtxt"><b id="vTxt">${esc(vTxt || (REC ? 'Đang nghe…' : 'Chạm micro và nói'))}</b><small id="vSub">VD: “sữa cho con nhỏ 450 nghìn apple pay”</small></div></div>`;
   if (['vao', 'ra'].includes(g.loai)) h += '<p class="note">Tiền vào/ra do vay nợ hoặc mua bán tài sản – không tính vào thu nhập / chi tiêu.</p>';
-  h += `<div class="amount ${g.loai === 'chi' ? 'chi' : g.loai === 'thu' ? 'thu' : ''}"><input id="g_soTien" inputmode="decimal" autocomplete="off" value="${g.soTien ? fmt(g.soTien) : ''}" placeholder="0"
-    oninput="coGian(this)" onblur="this.value=docSoTien(this.value)?fmt(docSoTien(this.value)):'';coGian(this)"><span>đ</span></div><p class="hint" style="text-align:center;margin:0 0 14px">Gõ tắt: 45k · 1tr2 · 2 triệu rưỡi</p>`;
+  h += `<div class="amount ${g.loai === 'chi' ? 'chi' : g.loai === 'thu' ? 'thu' : ''}"><input id="g_soTien" inputmode="numeric" autocomplete="off" value="${g.soTien ? fmt(g.soTien) : ''}" placeholder="0"
+    oninput="goSo(this);coGian(this);docChuGD()" onblur="this.value=docSoTien(this.value)?fmt(docSoTien(this.value)):'';coGian(this);docChuGD()"><span>đ</span></div>
+    <div class="chu" id="g_chu">${g.soTien ? docChu(g.soTien) : 'Nhập số tiền'}</div>
+    <div class="nhanh"><button onclick="themSo('000')">000</button><button onclick="themSo('0000')">0.000</button><button onclick="xoaSo()">⌫ Xóa</button></div>`;
   if (g.loai === 'chi' || g.loai === 'thu') {
     h += `<div class="lbl">Danh mục</div><div class="cats">${dsDM(g.loai).map(d => `<button class="cat ${d.ten === g.danhMuc ? 'on' : ''}" data-v="${esc(d.ten)}" onclick="chonDM(this)">
       <span class="ic" style="background:${mauDM(d.ten)}22">${iconDM(d.ten)}</span><small>${esc(d.ten)}</small></button>`).join('')}</div>`;
@@ -728,6 +735,30 @@ function veFormGD(vTxt) {
     <label class="fl"><span>Ghi chú</span><input id="g_ghiChu" autocomplete="off" placeholder="Không bắt buộc" value="${esc(g.ghiChu)}"></label></div>`;
   $('#gdForm').innerHTML = h; coGian($('#g_soTien'));
 }
+// Định dạng dấu phân cách hàng nghìn ngay khi gõ, giữ đúng vị trí con trỏ
+function goSo(el) {
+  const v = el.value;
+  if (/[^\d.\s]/.test(v)) return;                       // có chữ (45k, 1tr2) → định dạng khi rời ô
+  const pos = el.selectionStart == null ? v.length : el.selectionStart;
+  const soTruoc = v.slice(0, pos).replace(/\D/g, '').length;
+  const d = v.replace(/\D/g, '').replace(/^0+(?=\d)/, '').slice(0, 13);
+  const f = d ? Number(d).toLocaleString('vi-VN') : '';
+  if (f === v) return;
+  el.value = f;
+  let i = 0, c = 0;
+  while (i < f.length && c < soTruoc) { if (/\d/.test(f[i])) c++; i++; }
+  try { el.setSelectionRange(i, i); } catch (e) {}
+}
+// Đọc số bằng chữ ngắn gọn: 1250000 → "1 triệu 250 nghìn đồng"
+function docChu(n) {
+  n = Math.round(+n || 0); if (!n) return '';
+  const ty = Math.floor(n / 1e9), tr = Math.floor(n % 1e9 / 1e6), ng = Math.floor(n % 1e6 / 1e3), d = n % 1e3, p = [];
+  if (ty) p.push(ty.toLocaleString('vi-VN') + ' tỷ'); if (tr) p.push(tr + ' triệu'); if (ng) p.push(ng + ' nghìn'); if (d) p.push(d);
+  return p.join(' ') + ' đồng';
+}
+function docChuGD() { const el = $('#g_chu'), n = docSoTien($('#g_soTien').value); if (el) { el.textContent = n ? docChu(n) : 'Nhập số tiền'; el.classList.toggle('co', !!n); } }
+function themSo(z) { const el = $('#g_soTien'), d = el.value.replace(/\D/g, ''); el.value = d ? d + z : ''; goSo(el); coGian(el); docChuGD(); }
+function xoaSo() { const el = $('#g_soTien'); el.value = ''; coGian(el); docChuGD(); el.focus(); }
 function coGian(el) { if (el) el.style.width = Math.max(1, (el.value || '0').length) * 0.57 + 0.5 + 'em'; }
 function docGD() {
   const v = id => $(id) ? $(id).value.trim() : null;
