@@ -16,11 +16,11 @@
 :root{
   --bg:#f2f2f7;--card:#fff;--card2:#f7f7fa;--tx:#111827;--mu:#8e8e93;--bd:rgba(60,60,67,.12);
   --pri:#0f766e;--pri2:#4f46e5;--grad:linear-gradient(135deg,#0f766e 0%,#0e7490 45%,#4f46e5 100%);
-  --thu:#16a34a;--chi:#ef4444;--warn:#f59e0b;--glass:rgba(255,255,255,.78);--shadow:0 6px 24px rgba(17,24,39,.06);
+  --thu:#16a34a;--chi:#ef4444;--warn:#f59e0b;--glass:rgba(242,242,247,.96);--mu2:#3c3c43b3;--shadow:0 6px 24px rgba(17,24,39,.06);
 }
 @media (prefers-color-scheme:dark){:root{
   --bg:#000;--card:#1c1c1e;--card2:#2c2c2e;--tx:#f5f5f7;--mu:#98989f;--bd:rgba(84,84,88,.45);
-  --glass:rgba(28,28,30,.78);--shadow:none;--thu:#30d158;--chi:#ff453a}}
+  --glass:rgba(0,0,0,.94);--mu2:#ebebf5b3;--shadow:none;--thu:#30d158;--chi:#ff453a}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0}
 html{background:var(--bg)}
 body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);
@@ -29,10 +29,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 input,select{font:inherit;color:var(--tx)}
 .hidden{display:none!important}
 /* ---------- Header ---------- */
-.top{position:sticky;top:0;z-index:20;padding:calc(env(safe-area-inset-top) + 8px) 18px 10px;background:var(--glass);
-  -webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.top{position:sticky;top:0;z-index:20;padding:calc(env(safe-area-inset-top) + 10px) 18px 10px;background:var(--bg);
+  transition:background .2s,box-shadow .2s;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.top.cuon{box-shadow:0 .5px 0 var(--bd),0 6px 16px rgba(0,0,0,.04)}
 .top h1{font-size:30px;font-weight:800;letter-spacing:-.6px}
-.top .sub{font-size:13px;color:var(--mu);font-weight:600;margin-bottom:2px;display:flex;align-items:center;gap:6px}
+.top .sub{font-size:14px;color:var(--mu2);font-weight:600;margin-bottom:2px;display:flex;align-items:center;gap:6px}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--warn);display:inline-block;animation:pulse 1s infinite}
 .mpill{display:flex;align-items:center;background:var(--card);border-radius:20px;box-shadow:var(--shadow);margin-bottom:4px}
 .mpill button{width:34px;height:34px;font-size:20px;color:var(--pri)}
@@ -150,6 +151,10 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
 .amount input{width:2.2ch;max-width:86%;border:0;background:none;text-align:center;font-size:42px;font-weight:800;letter-spacing:-1px;outline:none;font-variant-numeric:tabular-nums}
 .amount.chi input{color:var(--chi)}.amount.thu input{color:var(--thu)}
 .amount span{font-size:24px;font-weight:700;color:var(--mu)}
+.chu{text-align:center;font-size:15px;font-weight:600;color:var(--mu);margin:-2px 0 10px;min-height:20px}
+.chu.co{color:var(--pri)}
+.nhanh{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
+.nhanh button{background:var(--card);border-radius:12px;padding:8px 16px;font-weight:700;font-size:15px;box-shadow:var(--shadow)}
 .lbl{font-size:13px;font-weight:700;color:var(--mu);margin:4px 4px 8px;text-transform:uppercase;letter-spacing:.2px}
 .cats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 4px;margin-bottom:14px}
 .cat{display:flex;flex-direction:column;align-items:center;gap:5px;padding:6px 2px;border-radius:14px}
@@ -176,10 +181,10 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
 .qinput{display:flex;gap:8px;margin-bottom:14px}
 .qinput input{flex:1;min-width:0;background:var(--card);border:0;border-radius:12px;padding:11px 12px;font-size:15px;outline:none}
 /* toast */
-#toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 12px);transform:translate(-50%,-140%);z-index:60;background:rgba(30,30,32,.92);color:#fff;
-  padding:11px 18px;border-radius:16px;font-size:14px;font-weight:600;transition:transform .35s cubic-bezier(.2,.9,.25,1.2);max-width:90%;text-align:center;
+#toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 12px);transform:translate(-50%,-16px) scale(.96);opacity:0;visibility:hidden;z-index:60;background:rgba(30,30,32,.92);color:#fff;
+  padding:11px 18px;border-radius:16px;font-size:14px;font-weight:600;transition:transform .3s cubic-bezier(.2,.9,.25,1.2),opacity .25s,visibility 0s .3s;max-width:90%;text-align:center;
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);pointer-events:none}
-#toast.show{transform:translate(-50%,0)}#toast.err{background:rgba(220,38,38,.95)}
+#toast.show{transform:translate(-50%,0);opacity:1;visibility:visible;transition:transform .3s cubic-bezier(.2,.9,.25,1.2),opacity .2s}#toast.err{background:rgba(220,38,38,.95)}
 /* setup */
 .setup{padding:calc(env(safe-area-inset-top) + 40px) 22px 30px;max-width:460px;margin:0 auto}
 .setup .logo{width:84px;height:84px;border-radius:22px;margin-bottom:16px;box-shadow:0 10px 30px rgba(79,70,229,.3)}
@@ -192,6 +197,18 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
 .kv{display:flex;justify-content:space-between;gap:10px;padding:12px 16px;font-size:15px;position:relative}
 .kv+.kv:before{content:"";position:absolute;top:0;left:16px;right:0;border-top:.5px solid var(--bd)}
 .kv>span{color:var(--mu)}.kv b{text-align:right;font-weight:600}
+.beta{font-size:11px;font-weight:800;letter-spacing:.5px;vertical-align:middle;padding:3px 7px;border-radius:7px;background:#f59e0b;color:#fff;position:relative;top:-4px}
+.tgbox{background:var(--card);border-radius:16px;padding:12px 14px;margin-bottom:14px}
+.tgbox .hd{display:flex;align-items:center;justify-content:space-between;font-weight:700}
+.sw{width:51px;height:31px;border-radius:16px;background:rgba(120,120,128,.24);position:relative;transition:background .2s;flex:0 0 51px}
+.sw:after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s}
+.sw.on{background:#34c759}.sw.on:after{transform:translateX(20px)}
+.tgbox .chips{margin:10px -14px 6px;padding:2px 14px}
+.tgrow{display:flex;gap:8px;margin:6px 0}
+.tgrow label{flex:1;font-size:12px;color:var(--mu);font-weight:600}
+.tgrow input{display:block;width:100%;margin-top:4px;border:0;border-radius:10px;padding:10px;background:var(--card2);font-size:16px;color:var(--tx)}
+.tgsum{margin-top:8px;padding:10px 12px;border-radius:12px;background:rgba(15,118,110,.08);font-size:14px;line-height:1.55}
+.tgsum b{color:var(--pri)}
 .fade{animation:fade .25s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .skel{height:90px;border-radius:20px;background:linear-gradient(90deg,var(--card) 0%,var(--card2) 50%,var(--card) 100%);background-size:200% 100%;animation:sk 1.2s infinite;margin-bottom:14px}
@@ -210,6 +227,7 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
   <div class="lbl">Mã bí mật</div>
   <textarea id="setupKey" style="min-height:64px" placeholder="Dán mã 64 ký tự từ Nhật ký thực thi (hàm taoMaBiMat)"></textarea>
   <button class="btn pri" style="width:100%" onclick="ketNoiTuLink()">Kết nối</button>
+  <button class="btn" style="width:100%;margin-top:10px" onclick="batDemo()">🧪 Dùng dữ liệu thử (không đụng Google Sheet)</button>
   <p style="margin-top:16px;font-size:13px">Mã bí mật chỉ lưu trên thiết bị này. Không gửi mã cho người khác.</p>
 </div>
 
@@ -242,12 +260,15 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
    SỔ TÀI CHÍNH GIA ĐÌNH – giao diện iPhone (GitHub Pages) – phiên bản 2
    Dữ liệu: Google Sheet qua API Apps Script (cần đường dẫn + mã bí mật).
    ===================================================================== */
+const BETA = /\/beta\//.test(location.pathname);       // bản thử nghiệm chạy ở thư mục /beta/
+const PF = BETA ? 'stcb_' : 'stc_';                         // tách bộ nhớ trên máy giữa bản chính và bản beta
+const PHIEN_BAN = '2.4' + (BETA ? '-beta' : '');
 const SVG_MIC = '<svg class="i" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></svg>';
 
 // ---------- Hằng số ----------
-const BANG = ['GiaoDich', 'Vi', 'DanhMuc', 'VayNo', 'TaiSan', 'DinhKy', 'CaiDat'];
+const BANG = ['GiaoDich', 'Vi', 'DanhMuc', 'VayNo', 'TaiSan', 'DinhKy', 'CaiDat', 'TraGop'];
 const SO = {GiaoDich:['soTien'], Vi:['soDuDau','thuTu','hanMuc','ngayTT'], DanhMuc:['nganSach','thuTu'], VayNo:['soTien','laiSuat'],
-  TaiSan:['soLuong','giaVon','donGiaHT','giaTriHT','mucTieu','laiSuat'], DinhKy:['soTien','ngayTrongThang'], CaiDat:[]};
+  TaiSan:['soLuong','giaVon','donGiaHT','giaTriHT','mucTieu','laiSuat'], DinhKy:['soTien','ngayTrongThang'], CaiDat:[], TraGop:['soTien','soKy','laiThang','phiCD','daGhi']};
 const NHOM_TS = [['tietkiem','Tiết kiệm ngân hàng','🏦'],['vang','Vàng','🪙'],['dat','Đất / nhà','🏡'],['chungkhoan','Chứng khoán / quỹ','📈'],['khac','Tài sản khác','💎']];
 const TEN_LOAI = {chi:'Chi tiêu', thu:'Thu nhập', chuyen:'Chuyển tiền', vao:'Tiền vào', ra:'Tiền ra'};
 const LOAI_VI = [['tindung','Thẻ tín dụng / Apple Pay'],['tienmat','Tiền mặt'],['nganhang','Tài khoản ngân hàng'],['vidientu','Ví điện tử'],['khac','Khác']];
@@ -264,7 +285,7 @@ const DM_MAC_DINH = [
   ['Đi lại','chi','xăng,đổ xăng,gửi xe,grab,taxi,sửa xe,bảo dưỡng xe,vé xe,vé tàu,vé máy bay'],
   ['Y tế','chi','thuốc,khám,khám bệnh,bệnh viện,viện phí,tiêm,vắc xin'],
   ['Hiếu hỉ & biếu tặng','chi','đám cưới,mừng cưới,phúng,viếng,đám hiếu,quà,biếu,mừng tuổi,sinh nhật'],
-  ['Mua sắm','chi','quần áo,giày,dép,mỹ phẩm,shopee,lazada,tiktok shop,đồ gia dụng'],
+  ['Mua sắm','chi','quần áo,giày,dép,mỹ phẩm,shopee,lazada,tiktok shop,đồ gia dụng,tủ lạnh,máy giặt,tivi,ti vi,điều hòa,laptop,máy tính,đồ điện tử'],
   ['Giải trí & du lịch','chi','du lịch,khách sạn,xem phim,karaoke,nhà hàng,liên hoan'],
   ['Điện thoại','chi','điện thoại,nạp tiền điện thoại,cước điện thoại,thẻ cào,4g'],
   ['Bảo hiểm','chi','bảo hiểm,bhyt,bhxh'],
@@ -316,9 +337,9 @@ function toast(m, loi) {
 // ---------- Kết nối API ----------
 function docCauHinh() {
   const h = new URLSearchParams(location.hash.slice(1));
-  if (h.get('api')) ls.set('stc_api', h.get('api'));
-  if (h.get('key')) ls.set('stc_key', h.get('key'));
-  CFG.api = ls.get('stc_api') || ''; CFG.key = ls.get('stc_key') || '';
+  if (h.get('api')) ls.set(PF + 'api', h.get('api'));
+  if (h.get('key')) ls.set(PF + 'key', h.get('key'));
+  CFG.api = ls.get(PF + 'api') || ''; CFG.key = ls.get(PF + 'key') || '';
   if ($('#setupApi')) $('#setupApi').value = CFG.api;
   return !!(CFG.api && CFG.key);
 }
@@ -326,10 +347,11 @@ function ketNoiTuLink() {
   const api = $('#setupApi').value.trim(), key = $('#setupKey').value.replace(/\s+/g, '');
   if (!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(api)) return toast('Địa chỉ API chưa đúng', 1);
   if (!/^[a-f0-9]{32,}$/i.test(key)) return toast('Mã bí mật chưa đúng', 1);
-  ls.set('stc_api', api); ls.set('stc_key', key);
+  ls.set(PF + 'api', api); ls.set(PF + 'key', key);
   history.replaceState(null, '', location.pathname + '#api=' + encodeURIComponent(api)); khoiDong();
 }
 async function goi(fn, ...args) {
+  if (CFG.api === 'demo') return demoGoi(fn, args);
   const r = await fetch(CFG.api, {method:'POST', redirect:'follow', headers:{'Content-Type':'text/plain;charset=utf-8'},
     body: JSON.stringify({key:CFG.key, fn, args})});
   if (!r.ok) throw new Error('Máy chủ lỗi ' + r.status);
@@ -363,7 +385,8 @@ function timSoTien(s) {
   }
   return {v:Math.round(v), i:t.i, j};
 }
-const docSoTien = str => (timSoTien(chuanChuoi(str)) || {}).v || 0;
+// Ô số tiền: chỉ có chữ số → lấy đúng con số đã gõ; có chữ (45k, 1tr2) → hiểu theo cách nói tắt
+const docSoTien = str => /^[\d.\s]*$/.test(String(str || '')) ? +String(str || '').replace(/\D/g, '') || 0 : (timSoTien(chuanChuoi(str)) || {}).v || 0;
 function khopTuKhoa(sach, ten, tuKhoa) {
   let dai = 0;
   [ten, ...String(tuKhoa || '').split(',')].map(x => x.trim().toLowerCase()).filter(Boolean)
@@ -375,6 +398,14 @@ function phanTich(text) {
   const st = timSoTien(s);
   if (st) kq.soTien = st.v;
   let conLai = ' ' + (st ? s.slice(0, st.i) + ' ' + s.slice(st.j) : s) + ' ';
+  if (/trả góp|góp \d+ (tháng|kỳ|kì)/.test(s)) {
+    kq.traGop = {};
+    const ky = s.match(/(\d+)\s*(tháng|kỳ|kì)/); if (ky) kq.traGop.soKy = +ky[1];
+    const lai = s.match(/lãi(?:\s*suất)?\s*(\d+(?:\.\d+)?)\s*(%|phần trăm)/) || s.match(/(\d+(?:\.\d+)?)\s*(%|phần trăm)/);
+    if (lai) kq.traGop.laiThang = +lai[1]; else if (/không lãi|lãi suất không|0 lãi/.test(s)) kq.traGop.laiThang = 0;
+    conLai = conLai.replace(/(mua\s+)?trả góp/g, ' ').replace(/(lãi(\s*suất)?\s*)?\d+(\.\d+)?\s*(%|phần trăm)/g, ' ')
+      .replace(/\d+\s*(tháng|kỳ|kì)/g, ' ').replace(/không lãi|lãi suất không/g, ' ');
+  }
   const sach = ' ' + s.replace(/[.,;:!?()"]/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
   let tot = null, dai = 0;
   dsDM().forEach(d => { const l = khopTuKhoa(sach, d.ten, d.tuKhoa); if (l > dai) { dai = l; tot = d; } });
@@ -400,7 +431,7 @@ const dsDM = (loai, caAn) => S.db.DanhMuc.filter(d => (!loai || d.loai === loai)
 const dsDoiTuong = () => String((S.db.CaiDat.find(c => c.khoa === 'doiTuong') || {}).giaTri || 'Chung').split(',').map(x => x.trim()).filter(Boolean);
 const viTheoTen = t => S.db.Vi.find(v => v.ten === t);
 function viMacDinh() {
-  const cu = ls.get('stc_viCuoi'); if (cu && dsVi().some(v => v.ten === cu)) return cu;
+  const cu = ls.get(PF + 'viCuoi'); if (cu && dsVi().some(v => v.ten === cu)) return cu;
   return (dsVi().find(v => v.loai === 'tindung') || dsVi()[0] || {}).ten || '';
 }
 function iconDM(ten) { const d = S.db.DanhMuc.find(x => x.ten === ten); return (d && d.icon) || ICON_DM[ten] || (d && d.loai === 'thu' ? '💰' : '📦'); }
@@ -440,7 +471,7 @@ function giaTriTS(t) {
 }
 function taiSanRong() {
   let tien = 0, noThe = 0;
-  dsVi(true).forEach(v => { const s = soDuVi(v.ten); if (v.loai === 'tindung') noThe += -s; else tien += s; });
+  dsVi(true).forEach(v => { const s = soDuVi(v.ten); if (v.loai === 'tindung') noThe += -s + gocTGChoThe(v.ten); else tien += s; });
   const ts = tong(S.db.TaiSan, giaTriTS);
   let choVay = 0, noVay = 0;
   S.db.VayNo.forEach(v => { const c = trangThaiVay(v).conLai; if (v.loai === 'vay') noVay += c; else choVay += c; });
@@ -450,6 +481,7 @@ function canChuY() {
   const out = [], t = homNay().slice(0, 7), d = +homNay().slice(8);
   S.db.DinhKy.filter(k => !k.an && k.lanCuoi !== t && (+k.ngayTrongThang || 1) <= d + 3).forEach(k => out.push({k:'dk', o:k}));
   dsVi().filter(v => v.loai === 'tindung' && v.ngayTT && soDuVi(v.ten) < 0).forEach(v => { const h = hanThe(v); if (soNgayToi(h) <= 5) out.push({k:'the', o:v, h}); });
+  S.db.TraGop.filter(t => t.trangThai !== 'xong').forEach(t => { const h = tinhTG(t).kyTiep; if (h && soNgayToi(h) <= 3) out.push({k:'tg', o:t, h}); });
   const moc = congNgay(homNay(), 7);
   S.db.VayNo.filter(v => v.trangThai !== 'xong' && v.hanTra && v.hanTra <= moc && trangThaiVay(v).conLai > 0).forEach(v => out.push({k:'no', o:v}));
   return out;
@@ -458,7 +490,7 @@ function canChuY() {
 // ---------- Đồng bộ ----------
 let hang = Promise.resolve(), dangLuu = 0;
 function chamDangLuu() { $('#sub').innerHTML = (dangLuu ? '<i class="dot"></i> Đang lưu…' : phuDe()); }
-function luuCache() { ls.set('stc_cache', JSON.stringify(S.db)); }
+function luuCache() { ls.set(PF + 'cache', JSON.stringify(S.db)); }
 function ghi(ds) {
   ds.forEach(c => {
     const arr = S.db[c.bang], key = c.bang === 'CaiDat' ? 'khoa' : 'id';
@@ -477,10 +509,10 @@ function napDuLieu(d) { BANG.forEach(b => S.db[b] = (d[b] || []).map(r => chuanS
 async function tai() {
   try {
     const d = await goi('layDuLieu');
-    napDuLieu(d); ls.set('stc_url', d.url || ''); luuCache();
+    napDuLieu(d); ls.set(PF + 'url', d.url || ''); luuCache();
     await moiDuLieu(); ve();
   } catch (e) {
-    if (/mã bí mật/i.test(e.message)) { ls.del('stc_key'); toast('Mã bí mật không đúng hoặc đã đổi', 1); return khoiDong(); }
+    if (/mã bí mật/i.test(e.message)) { ls.del(PF + 'key'); toast('Mã bí mật không đúng hoặc đã đổi', 1); return khoiDong(); }
     toast('Không tải được dữ liệu (' + e.message + '). Đang hiển thị bản lưu trên máy.', 1);
   }
 }
@@ -489,11 +521,11 @@ async function moiDuLieu() {
   const can = [];
   if (!S.db.Vi.length) [['Tiền mặt','tienmat','tiền mặt'],['Ngân hàng','nganhang','chuyển khoản,ck,ngân hàng,atm']]
     .forEach((x, i) => can.push({bang:'Vi', r:{id:'vi' + (i + 1), ten:x[0], loai:x[1], soDuDau:0, tuKhoa:x[2], thuTu:i + 1, an:'', hanMuc:0, ngayTT:0}}));
-  if (!S.db.Vi.some(v => v.loai === 'tindung') && !ls.get('stc_khongThe')) {
+  if (!S.db.Vi.some(v => v.loai === 'tindung') && !ls.get(PF + 'khongThe')) {
     can.push({bang:'Vi', r:{id:'vi_the', ten:'Thẻ tín dụng', loai:'tindung', soDuDau:0, tuKhoa:TK_THE, thuTu:0, an:'', hanMuc:0, ngayTT:0}});
     S.db.Vi.filter(v => v.loai === 'nganhang' && /(^|,)\s*(thẻ|quẹt thẻ)\s*(,|$)/.test(v.tuKhoa || ''))
       .forEach(v => can.push({bang:'Vi', r:{...v, tuKhoa:String(v.tuKhoa).split(',').map(x => x.trim()).filter(x => x && x !== 'thẻ' && x !== 'quẹt thẻ').join(',')}}));
-    ls.set('stc_khongThe', '1');
+    ls.set(PF + 'khongThe', '1');
   }
   if (!S.db.DanhMuc.length) DM_MAC_DINH.forEach((x, i) => can.push({bang:'DanhMuc', r:{id:'dm' + (i + 1), ten:x[0], loai:x[1], tuKhoa:x[2], nganSach:0, thuTu:i + 1, an:'', icon:''}}));
   if (!S.db.CaiDat.find(c => c.khoa === 'doiTuong')) can.push({bang:'CaiDat', r:{khoa:'doiTuong', giaTri:'Chung,Bố,Mẹ,Con lớn,Con nhỏ'}});
@@ -522,7 +554,7 @@ function oNhap(f, val) {
     const o = (typeof f.o === 'function' ? f.o() : f.o).map(x => Array.isArray(x) ? x : [x, x]);
     inp = `<select id="${id}">${o.map(([a, b]) => `<option value="${esc(a)}"${String(a) === String(val) ? ' selected' : ''}>${esc(b)}</option>`).join('')}</select>`;
   } else if (f.t === 'money') {
-    inp = `<input id="${id}" inputmode="decimal" autocomplete="off" value="${val ? fmt(val) : ''}" placeholder="0 đ" onblur="this.value=docSoTien(this.value)?fmt(docSoTien(this.value)):''">`;
+    inp = `<input id="${id}" inputmode="numeric" autocomplete="off" value="${val ? fmt(val) : ''}" placeholder="0 đ" oninput="goSo(this)" onblur="this.value=docSoTien(this.value)?fmt(docSoTien(this.value)):''">`;
   } else {
     inp = `<input id="${id}" type="${f.t === 'date' ? 'date' : 'text'}" ${f.t === 'number' ? 'inputmode="decimal"' : ''} autocomplete="off" value="${esc(val)}" placeholder="${esc(f.ph || '')}">`;
   }
@@ -554,11 +586,11 @@ function moForm(tieuDe, fields, v, onLuu, nutThem = [], ghiChu = '') {
 const optVi = rong => (rong ? [['', rong]] : []).concat(dsVi().map(v => [v.ten, (ICON_VI[v.loai] || '') + ' ' + v.ten]));
 
 // ---------- Điều hướng ----------
-const TIEU_DE = {tq:'Tổng quan', so:'Sổ thu chi', ts:'Tài sản', khac:'Khác', vay:'Vay & cho vay', con:'Quỹ của con', dm:'Ngân sách', vi:'Ví & thẻ', dk:'Định kỳ', cd:'Cài đặt'};
+const TIEU_DE = {tq:'Tổng quan', so:'Sổ thu chi', ts:'Tài sản', khac:'Khác', vay:'Vay & cho vay', con:'Quỹ của con', dm:'Ngân sách', vi:'Ví & thẻ', dk:'Định kỳ', cd:'Cài đặt', tg:'Trả góp'};
 const CO_THANG = ['tq', 'so', 'con', 'dm'];
 function phuDe() {
   if (S.tab === 'tq') { const h = new Date().getHours(); return h < 11 ? 'Chào buổi sáng ☀️' : h < 14 ? 'Chào buổi trưa 🌤' : h < 18 ? 'Chào buổi chiều ⛅' : 'Chào buổi tối 🌙'; }
-  return ['vay','con','dm','vi','dk','cd'].includes(S.tab) ? '<button onclick="chuyenTab(\'khac\')" style="color:var(--pri);font-weight:600">‹ Khác</button>' : '';
+  return ['vay','con','dm','vi','dk','cd','tg'].includes(S.tab) ? '<button onclick="chuyenTab(\'khac\')" style="color:var(--pri);font-weight:600">‹ Khác</button>' : '';
 }
 function chuyenTab(t) { S.tab = t; ve(); window.scrollTo({top:0}); }
 function doiThang(d) {
@@ -566,12 +598,12 @@ function doiThang(d) {
   S.thang = x.getFullYear() + '-' + pad(x.getMonth() + 1); ve();
 }
 function ve() {
-  $('#tieuDe').textContent = TIEU_DE[S.tab]; chamDangLuu();
+  $('#tieuDe').innerHTML = esc(TIEU_DE[S.tab]) + (BETA ? ' <span class="beta">' + (CFG.api === 'demo' ? 'THỬ' : 'BETA') + '</span>' : ''); chamDangLuu();
   $('#mnav').style.visibility = CO_THANG.includes(S.tab) ? 'visible' : 'hidden';
   $('#nhanThang').textContent = 'Th ' + +S.thang.slice(5) + '/' + S.thang.slice(2, 4);
-  const goc = ['vay','con','dm','vi','dk','cd'].includes(S.tab) ? 'khac' : S.tab;
+  const goc = ['vay','con','dm','vi','dk','cd','tg'].includes(S.tab) ? 'khac' : S.tab;
   document.querySelectorAll('#tabs button[data-t]').forEach(b => b.classList.toggle('on', b.dataset.t === goc));
-  const V = {tq:vTongQuan, so:vSo, ts:vTaiSan, khac:vKhac, vay:vVay, con:vCon, dm:vDanhMuc, vi:vVi, dk:vDinhKy, cd:vCaiDat};
+  const V = {tq:vTongQuan, so:vSo, ts:vTaiSan, khac:vKhac, vay:vVay, con:vCon, dm:vDanhMuc, vi:vVi, dk:vDinhKy, cd:vCaiDat, tg:vTraGop};
   $('#view').innerHTML = '<div class="fade">' + V[S.tab]() + '</div>';
 }
 
@@ -592,9 +624,9 @@ function theVi(v) {
   const s = soDuVi(v.ten), the = v.loai === 'tindung';
   let duoi = '';
   if (the) {
-    const no = Math.max(0, -s), h = hanThe(v);
-    duoi = `<div><div class="s">${v.hanMuc ? 'Còn có thể chi ' + fmtTat(v.hanMuc - no) : 'Dư nợ hiện tại'}${h && no > 0 ? ' · hạn ' + h.slice(8) + '/' + h.slice(5, 7) : ''}</div>
-      ${v.hanMuc ? `<div class="lim"><i style="width:${Math.min(100, no / v.hanMuc * 100)}%"></i></div>` : ''}</div>`;
+    const no = Math.max(0, -s), h = hanThe(v), tg = gocTGChoThe(v.ten);
+    duoi = `<div><div class="s">${v.hanMuc ? 'Còn có thể chi ' + fmtTat(v.hanMuc - no - tg) : tg ? 'Trả góp còn ' + fmtTat(tg) : 'Dư nợ hiện tại'}${h && no > 0 ? ' · hạn ' + h.slice(8) + '/' + h.slice(5, 7) : ''}</div>
+      ${v.hanMuc ? `<div class="lim"><i style="width:${Math.min(100, (no + tg) / v.hanMuc * 100)}%"></i></div>` : ''}</div>`;
   } else duoi = `<div class="s">${esc((LOAI_VI.find(x => x[0] === v.loai) || ['', ''])[1])}</div>`;
   return `<button class="wc ${esc(v.loai)}" onclick="moViCT('${esc(v.id)}')"><div class="t">${ICON_VI[v.loai] || '👛'} ${esc(v.ten)}<span>${the ? 'Apple Pay' : ''}</span></div>
     <div><div class="s">${the ? 'Dư nợ' : 'Số dư'}</div><div class="v">${fmt(the ? Math.max(0, -s) : s)} đ</div></div>${duoi}</button>`;
@@ -627,6 +659,10 @@ function vTongQuan() {
       else if (x.k === 'the') { const n = soNgayToi(x.h);
         h += `<button class="it" onclick="moViCT('${esc(x.o.id)}')"><span class="ic" style="background:#ef444422">💳</span><span class="m"><b>Thanh toán ${esc(x.o.ten)}</b>
         <small>${n < 0 ? 'Quá hạn' : n === 0 ? 'Đến hạn hôm nay' : 'Còn ' + n + ' ngày'} · hạn ${ddmm(x.h)}</small></span><span class="a chi">${fmt(-soDuVi(x.o.ten))}</span></button>`; }
+      else if (x.k === 'tg') { const c = tinhTG(x.o), n = soNgayToi(x.h);
+        h += `<div class="it"><span class="ic" style="background:#f43f5e22">🧾</span><span class="m"><b>Trả góp ${esc(x.o.ten)}</b>
+        <small>Kỳ ${(x.o.daGhi || 0) + 1}/${x.o.soKy} · ${n < 0 ? 'quá hạn' : n === 0 ? 'hôm nay' : 'còn ' + n + ' ngày'} · ${fmt(c.moiKy)} đ</small></span>
+        <button class="btn sm pri" onclick="ghiKyTG('${esc(x.o.id)}')">Ghi</button></div>`; }
       else { const q = x.o.hanTra < homNay();
         h += `<button class="it" onclick="moVay('${esc(x.o.id)}')"><span class="ic" style="background:#6366f122">🤝</span><span class="m"><b>${x.o.loai === 'vay' ? 'Trả nợ' : 'Thu nợ'} ${esc(x.o.doiTac)}</b>
         <small>Hạn ${ddmm(x.o.hanTra)}${q ? ' · <span class="chi">quá hạn</span>' : ''}</small></span><span class="a">${fmt(trangThaiVay(x.o).conLai)}</span></button>`; }
@@ -706,10 +742,14 @@ function veFormGD(vTxt) {
   const g = G, loais = ['chi', 'thu', 'chuyen'].concat(['vao', 'ra'].includes(g.loai) ? [g.loai] : []);
   let h = `<div class="seg">${loais.map(l => `<button class="${g.loai === l ? 'on' : ''}" onclick="doiLoaiGD('${l}')">${{chi:'Chi', thu:'Thu', chuyen:'Chuyển / trả thẻ', vao:'Tiền vào', ra:'Tiền ra'}[l]}</button>`).join('')}</div>`;
   if (Gmoi) h += `<div class="vbox"><button class="mic ${REC ? 'rec' : ''}" id="micBtn" onclick="nghe()" aria-label="Nói">${SVG_MIC}</button>
-    <div class="vtxt"><b id="vTxt">${esc(vTxt || (REC ? 'Đang nghe…' : 'Chạm micro và nói'))}</b><small id="vSub">VD: “sữa cho con nhỏ 450 nghìn apple pay”</small></div></div>`;
+    <div class="vtxt"><b id="vTxt">${esc(vTxt || (REC ? 'Đang nghe…' : 'Chạm micro và nói'))}</b><small id="vSub">VD: “sữa cho con nhỏ 450 nghìn apple pay”</small></div></div>
+    <div class="qinput"><input id="qText" placeholder="Hoặc gõ / đọc chính tả bằng bàn phím…" enterkeyhint="done" autocomplete="off"
+      onkeydown="if(event.key==='Enter'){event.preventDefault();apDungQ()}"><button class="btn sm pri" onclick="apDungQ()">Điền</button></div>`;
   if (['vao', 'ra'].includes(g.loai)) h += '<p class="note">Tiền vào/ra do vay nợ hoặc mua bán tài sản – không tính vào thu nhập / chi tiêu.</p>';
-  h += `<div class="amount ${g.loai === 'chi' ? 'chi' : g.loai === 'thu' ? 'thu' : ''}"><input id="g_soTien" inputmode="decimal" autocomplete="off" value="${g.soTien ? fmt(g.soTien) : ''}" placeholder="0"
-    oninput="coGian(this)" onblur="this.value=docSoTien(this.value)?fmt(docSoTien(this.value)):'';coGian(this)"><span>đ</span></div><p class="hint" style="text-align:center;margin:0 0 14px">Gõ tắt: 45k · 1tr2 · 2 triệu rưỡi</p>`;
+  h += `<div class="amount ${g.loai === 'chi' ? 'chi' : g.loai === 'thu' ? 'thu' : ''}"><input id="g_soTien" inputmode="numeric" autocomplete="off" value="${g.soTien ? fmt(g.soTien) : ''}" placeholder="0"
+    oninput="goSo(this);coGian(this);docChuGD();tomTatTG()" onblur="this.value=docSoTien(this.value)?fmt(docSoTien(this.value)):'';coGian(this);docChuGD()"><span>đ</span></div>
+    <div class="chu" id="g_chu">${g.soTien ? docChu(g.soTien) : 'Nhập số tiền'}</div>
+    <div class="nhanh"><button onclick="themSo('000')">000</button><button onclick="themSo('0000')">0.000</button><button onclick="xoaSo()">⌫ Xóa</button></div>`;
   if (g.loai === 'chi' || g.loai === 'thu') {
     h += `<div class="lbl">Danh mục</div><div class="cats">${dsDM(g.loai).map(d => `<button class="cat ${d.ten === g.danhMuc ? 'on' : ''}" data-v="${esc(d.ten)}" onclick="chonDM(this)">
       <span class="ic" style="background:${mauDM(d.ten)}22">${iconDM(d.ten)}</span><small>${esc(d.ten)}</small></button>`).join('')}</div>`;
@@ -718,10 +758,36 @@ function veFormGD(vTxt) {
   h += `<div class="lbl">${g.loai === 'chuyen' ? 'Từ' : g.loai === 'thu' || g.loai === 'vao' ? 'Nhận vào' : 'Thanh toán bằng'}</div>${chipVi('vi', g.vi)}`;
   if (g.loai === 'chuyen') h += `<div class="lbl">Đến (chọn thẻ tín dụng để trả nợ thẻ)</div>${chipVi('viDen', g.viDen)}`;
   if (g.loai !== 'chuyen') h += `<div class="lbl">Dành cho</div><div class="chips">${dsDoiTuong().map(t => `<button class="chip ${t === (g.doiTuong || 'Chung') ? 'on' : ''}" data-f="doiTuong" data-v="${esc(t)}" onclick="chonChip(this)">${t === 'Chung' ? '👨‍👩‍👧‍👦' : '👤'} ${esc(t)}</button>`).join('')}</div>`;
+  const laThe = (viTheoTen(g.vi) || {}).loai === 'tindung';
+  if (Gmoi && g.loai === 'chi' && laThe) h += khoiTG();
   h += `<div class="grp"><label class="fl"><span>Ngày</span><input id="g_ngay" type="date" value="${esc(g.ngay)}"></label>
     <label class="fl"><span>Ghi chú</span><input id="g_ghiChu" autocomplete="off" placeholder="Không bắt buộc" value="${esc(g.ghiChu)}"></label></div>`;
-  $('#gdForm').innerHTML = h; coGian($('#g_soTien'));
+  $('#gdForm').innerHTML = h; coGian($('#g_soTien')); tomTatTG();
 }
+// Định dạng dấu phân cách hàng nghìn ngay khi gõ, giữ đúng vị trí con trỏ
+function goSo(el) {
+  const v = el.value;
+  if (/[^\d.\s]/.test(v)) return;                       // có chữ (45k, 1tr2) → định dạng khi rời ô
+  const pos = el.selectionStart == null ? v.length : el.selectionStart;
+  const soTruoc = v.slice(0, pos).replace(/\D/g, '').length;
+  const d = v.replace(/\D/g, '').replace(/^0+(?=\d)/, '').slice(0, 13);
+  const f = d ? Number(d).toLocaleString('vi-VN') : '';
+  if (f === v) return;
+  el.value = f;
+  let i = 0, c = 0;
+  while (i < f.length && c < soTruoc) { if (/\d/.test(f[i])) c++; i++; }
+  try { el.setSelectionRange(i, i); } catch (e) {}
+}
+// Đọc số bằng chữ ngắn gọn: 1250000 → "1 triệu 250 nghìn đồng"
+function docChu(n) {
+  n = Math.round(+n || 0); if (!n) return '';
+  const ty = Math.floor(n / 1e9), tr = Math.floor(n % 1e9 / 1e6), ng = Math.floor(n % 1e6 / 1e3), d = n % 1e3, p = [];
+  if (ty) p.push(ty.toLocaleString('vi-VN') + ' tỷ'); if (tr) p.push(tr + ' triệu'); if (ng) p.push(ng + ' nghìn'); if (d) p.push(d);
+  return p.join(' ') + ' đồng';
+}
+function docChuGD() { const el = $('#g_chu'), n = docSoTien($('#g_soTien').value); if (el) { el.textContent = n ? docChu(n) : 'Nhập số tiền'; el.classList.toggle('co', !!n); } }
+function themSo(z) { const el = $('#g_soTien'), d = el.value.replace(/\D/g, ''); el.value = d ? d + z : ''; goSo(el); coGian(el); docChuGD(); }
+function xoaSo() { const el = $('#g_soTien'); el.value = ''; coGian(el); docChuGD(); el.focus(); }
 function coGian(el) { if (el) el.style.width = Math.max(1, (el.value || '0').length) * 0.57 + 0.5 + 'em'; }
 function docGD() {
   const v = id => $(id) ? $(id).value.trim() : null;
@@ -734,7 +800,10 @@ function doiLoaiGD(l) {
   G.loai = l; veFormGD();
 }
 function chonDM(el) { G.danhMuc = el.dataset.v; document.querySelectorAll('#gdForm .cat').forEach(c => c.classList.toggle('on', c === el)); }
-function chonChip(el) { G[el.dataset.f] = el.dataset.v; el.parentNode.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === el)); }
+function chonChip(el) {
+  G[el.dataset.f] = el.dataset.v; el.parentNode.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === el));
+  if (el.dataset.f === 'vi' && Gmoi && G.loai === 'chi') { docGD(); veFormGD(); }   // hiện / ẩn khối trả góp theo loại ví
+}
 function apDung(text) {
   docGD();
   const k = phanTich(text);
@@ -743,41 +812,63 @@ function apDung(text) {
   if (k.vi) G.vi = k.vi;
   if (k.doiTuong) G.doiTuong = k.doiTuong;
   if (k.ngay) G.ngay = k.ngay;
+  if (k.traGop) {
+    const the = (viTheoTen(G.vi) || {}).loai === 'tindung' ? G.vi : (dsVi().find(v => v.loai === 'tindung') || {}).ten;
+    if (the) { G.vi = the; G.loai = 'chi'; G.tg = {...macDinhTG(), ...(G.tg || {}), bat:true, ...k.traGop}; }
+  }
   G.ghiChu = k.ghiChu;
   veFormGD('“' + text + '”');
   const sub = $('#vSub');
   if (sub) sub.innerHTML = !k.soTien ? '<span class="chi">Chưa nghe rõ số tiền – nói lại hoặc nhập tay</span>'
     : !k.danhMuc ? '<span style="color:var(--warn)">Chọn danh mục bên dưới rồi bấm Lưu</span>' : '<span class="thu">✓ Đã điền – kiểm tra rồi bấm Lưu</span>';
 }
-let REC = null, recTxt = '', recDaApDung = false;
+let REC = null, recTxt = '', recDaApDung = false, recLuc = 0, recCo = false;
+// Gộp kết quả: Safari iOS đôi khi trả kết quả tích lũy (câu sau chứa câu trước) → tránh lặp chữ
+function gopKQ(results) {
+  const arr = [...results].map(x => x[0].transcript.trim()).filter(Boolean);
+  const dai = arr.reduce((a, b) => b.length > a.length ? b : a, '');
+  return arr.every(x => dai.toLowerCase().includes(x.toLowerCase())) ? dai : arr.join(' ');
+}
 function nghe() {
+  if (REC) { try { REC.stop(); } catch (e) {} return; }                  // chạm lần 2 = dừng & điền
+  if (Date.now() - recLuc < 700) return;                                // chống chạm đúp
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (REC) { REC.stop(); return; }
-  if (!SR) return toast('Trình duyệt chưa hỗ trợ nhận giọng nói. Trên iPhone hãy mở bằng Safari và bật Đọc chính tả.', 1);
+  if (!SR) return goiYDuPhong('Trình duyệt này chưa hỗ trợ nhận giọng nói – hãy gõ hoặc dùng micro trên bàn phím ở ô bên dưới.');
   let r;
-  try { r = new SR(); } catch (e) { return toast('Không khởi động được micro', 1); }
+  try { r = new SR(); } catch (e) { return goiYDuPhong('Không khởi động được micro.'); }
   r.lang = 'vi-VN'; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
-  recTxt = ''; recDaApDung = false;
-  r.onstart = () => { const b = $('#micBtn'); if (b) b.classList.add('rec'); const t = $('#vTxt'); if (t) t.textContent = 'Đang nghe…'; };
+  recTxt = ''; recDaApDung = false; recCo = false; recLuc = Date.now();
+  const datIm = ms => { clearTimeout(r._im); r._im = setTimeout(() => { try { r.stop(); } catch (e) {} }, ms); };
+  r.onstart = () => { const b = $('#micBtn'); if (b) b.classList.add('rec'); const t = $('#vTxt'); if (t) t.textContent = 'Đang nghe… nói đi ạ'; datIm(7000); };
   r.onresult = e => {
-    let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
-    recTxt = t; const el = $('#vTxt'); if (el) el.textContent = t;
-    if (e.results[e.results.length - 1].isFinal) { recDaApDung = true; apDung(t); }
+    recCo = true; recTxt = gopKQ(e.results);
+    const el = $('#vTxt'); if (el) el.textContent = recTxt;
+    datIm(1400);                                                         // im lặng 1,4 giây → tự dừng
+    if (e.results[e.results.length - 1].isFinal && !recDaApDung) { recDaApDung = true; apDung(recTxt); }
   };
   r.onerror = e => {
-    const m = {'not-allowed':'Chưa cho phép micro. Vào Cài đặt › Safari › Micro, chọn Cho phép.', 'service-not-allowed':'Hãy bật Đọc chính tả: Cài đặt › Cài đặt chung › Bàn phím › Bật Đọc chính tả.',
-      'no-speech':'Không nghe thấy gì, hãy thử lại', 'audio-capture':'Không tìm thấy micro', 'network':'Cần kết nối mạng để nhận giọng nói'}[e.error];
-    if (e.error !== 'aborted') toast(m || 'Lỗi nhận giọng nói: ' + e.error, 1);
+    if (e.error === 'aborted') return;
+    const m = {'not-allowed':'Chưa cho phép micro: Cài đặt › Safari › Micro › Cho phép (hoặc chạm “aA” trên thanh địa chỉ › Cài đặt trang web).',
+      'service-not-allowed':'Hãy bật Đọc chính tả: Cài đặt › Cài đặt chung › Bàn phím › Bật Đọc chính tả.',
+      'no-speech':'Chưa nghe thấy – chạm micro rồi nói ngay, hoặc gõ ở ô bên dưới.', 'audio-capture':'Micro đang bận (cuộc gọi/ghi âm khác?).',
+      'network':'Cần kết nối mạng để nhận giọng nói.'}[e.error];
+    goiYDuPhong(m || 'Lỗi nhận giọng nói (' + e.error + ').');
   };
   r.onend = () => {
-    REC = null; clearTimeout(r._t);
-    if (recTxt && !recDaApDung) apDung(recTxt);
+    clearTimeout(r._im); REC = null;
     const b = $('#micBtn'); if (b) b.classList.remove('rec');
-    const t = $('#vTxt'); if (t && t.textContent === 'Đang nghe…') t.textContent = 'Chạm micro và nói';
+    if (recTxt && !recDaApDung) { recDaApDung = true; apDung(recTxt); }
+    else if (!recCo) { const t = $('#vTxt'); if (t && /Đang nghe/.test(t.textContent)) t.textContent = 'Chạm micro và nói'; }
   };
-  REC = r; r._t = setTimeout(() => r.stop(), 12000);
-  try { r.start(); } catch (e) { REC = null; toast('Không khởi động được micro', 1); }
+  REC = r;
+  try { r.start(); } catch (e) { REC = null; goiYDuPhong('Không khởi động được micro, thử lại sau giây lát.'); }
 }
+function goiYDuPhong(m) {
+  const sub = $('#vSub'); if (sub) sub.innerHTML = '<span class="chi">' + esc(m) + '</span>';
+  else toast(m, 1);
+  if (navigator.standalone) toast('Mẹo: nếu micro hay lỗi khi mở từ màn hình chính, hãy mở bằng Safari.', 1);
+}
+function apDungQ() { const el = $('#qText'), v = el ? el.value.trim() : ''; if (v) { apDung(v); } else if (el) el.focus(); }
 function dungNghe() { if (REC) { try { REC.abort(); } catch (e) {} REC = null; } }
 function luuGD(tiep) {
   dungNghe(); docGD();
@@ -786,10 +877,11 @@ function luuGD(tiep) {
   if ((g.loai === 'chi' || g.loai === 'thu') && !g.danhMuc) return toast('Chọn danh mục', 1);
   if (!g.vi) return toast('Chọn ví / thẻ', 1);
   if (g.loai === 'chuyen' && (!g.viDen || g.viDen === g.vi)) return toast('Chọn nơi chuyển đến khác nơi chuyển đi', 1);
-  const r = {...g};
+  const r = {...g}; delete r.tg;
   if (r.loai === 'chuyen') { r.danhMuc = ''; r.doiTuong = ''; } else r.viDen = '';
   if (!r.id) { r.id = uid(); r.taoLuc = new Date().toISOString(); }
-  if (r.loai === 'chi') ls.set('stc_viCuoi', r.vi);
+  if (r.loai === 'chi') ls.set(PF + 'viCuoi', r.vi);
+  if (Gmoi && g.tg && g.tg.bat && r.loai === 'chi' && (viTheoTen(r.vi) || {}).loai === 'tindung') return taoTG(r, tiep);
   ghi([{bang:'GiaoDich', r}]);
   toast((r.loai === 'thu' ? '+' : r.loai === 'chi' ? '−' : '') + fmt(r.soTien) + ' đ · đã ghi');
   if (tiep) moGD(null, {ngay:r.ngay, vi:r.vi}); else dongSheet();
@@ -913,7 +1005,7 @@ function banTS(id) {
 // ---------- 4. Khác ----------
 function vKhac() {
   const m = [['vi', '💳', '#0f766e', 'Ví & thẻ tín dụng', 'Apple Pay, tiền mặt, ngân hàng'], ['dm', '🎯', '#f97316', 'Ngân sách & danh mục', 'Hạn mức chi, từ khóa giọng nói'],
-    ['dk', '🔁', '#8b5cf6', 'Khoản định kỳ', 'Điện, nước, học phí, internet'], ['vay', '🤝', '#0ea5e9', 'Vay & cho vay', 'Nợ phải trả, khoản phải thu'],
+    ['dk', '🔁', '#8b5cf6', 'Khoản định kỳ', 'Điện, nước, học phí, internet'], ['tg', '🧾', '#f43f5e', 'Trả góp thẻ tín dụng', 'Trả góp 0% hoặc có lãi, nhắc từng kỳ'], ['vay', '🤝', '#0ea5e9', 'Vay & cho vay', 'Nợ phải trả, khoản phải thu'],
     ['con', '👶', '#ec4899', 'Quỹ của con', 'Chi tiêu & tài sản theo thành viên'], ['cd', '⚙️', '#64748b', 'Cài đặt', 'Thành viên, dữ liệu, kết nối']];
   return `<div class="list menu" style="margin-top:6px">${m.map(([t, i, c, a, b]) => `<button class="it" onclick="chuyenTab('${t}')"><span class="ic" style="background:${c}">${i}</span>
     <span class="m"><b>${a}</b><small>${b}</small></span><span class="chev">›</span></button>`).join('')}</div>`;
@@ -936,10 +1028,14 @@ function moViCT(id) {
   let h = `<div class="wscroll" style="margin-bottom:10px">${theVi(v).replace('onclick=', 'data-x=')}</div><div class="grp">`;
   if (the) {
     h += kv('Dư nợ hiện tại', `<span class="chi">${fmt(no)} đ</span>`);
-    if (v.hanMuc) h += kv('Hạn mức', fmt(v.hanMuc)) + kv('Còn có thể chi', fmt(v.hanMuc - no));
+    const tg = gocTGChoThe(v.ten);
+    if (tg) h += kv('Trả góp chưa vào sao kê', fmt(tg));
+    if (v.hanMuc) h += kv('Hạn mức', fmt(v.hanMuc)) + kv('Còn có thể chi', fmt(v.hanMuc - no - tg));
     if (v.ngayTT) h += kv('Hạn thanh toán', ddmm(hanThe(v)));
   } else h += kv('Số dư', fmt(s) + ' đ');
   h += kv('Đã chi tháng này', fmt(tong(thang))) + '</div>';
+  const dsTG = S.db.TraGop.filter(t => t.vi === v.ten && t.trangThai !== 'xong');
+  if (dsTG.length) h += `<div class="lbl">Đang trả góp</div><div class="list">${dsTG.map(dongTG).join('')}</div>`;
   const gan = sapXepGD(S.db.GiaoDich.filter(g => g.vi === v.ten || g.viDen === v.ten)).slice(0, 8);
   if (gan.length) h += `<div class="lbl">Giao dịch gần đây</div><div class="list">${gan.map(dongGD).join('')}</div>`;
   const nut = [{t:'Sửa', fn:() => moVi(id)}];
@@ -1115,6 +1211,10 @@ function vCaiDat() {
     ${S.url ? `<a class="it" href="${esc(S.url)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none"><span class="ic" style="background:#16a34a22">📊</span><span class="m"><b>Mở Google Sheet</b><small>Xem / xuất Excel</small></span><span class="chev">›</span></a>` : ''}
     <button class="it" onclick="tai().then(()=>toast('Đã đồng bộ'))"><span class="ic" style="background:#0ea5e922">🔄</span><span class="m"><b>Đồng bộ lại</b><small>Tải dữ liệu mới nhất từ Sheet</small></span></button>
     <button class="it" onclick="ngatKetNoi()"><span class="ic" style="background:#ef444422">🔌</span><span class="m"><b class="chi">Ngắt kết nối thiết bị này</b><small>Xóa mã bí mật và dữ liệu tạm trên máy</small></span></button></div>
+    ${CFG.api === 'demo' ? `<div class="lbl">Dữ liệu thử</div><div class="list">
+    <button class="it" onclick="napMau()"><span class="ic" style="background:#f59e0b22">🧪</span><span class="m"><b>Nạp giao dịch mẫu</b><small>Thêm dữ liệu 3 tháng để xem biểu đồ</small></span></button>
+    <button class="it" onclick="xoaDemo()"><span class="ic" style="background:#ef444422">🗑️</span><span class="m"><b class="chi">Xóa toàn bộ dữ liệu thử</b><small>Bắt đầu lại từ đầu</small></span></button></div>` : ''}
+    <div class="grp">${kv('Phiên bản', PHIEN_BAN)}${kv('Nguồn dữ liệu', CFG.api === 'demo' ? 'Dữ liệu thử trên máy' : 'Google Sheet')}</div>
     <p class="note">Dữ liệu nằm trong Google Sheet của anh/chị. Không chia sẻ đường dẫn cài đặt; nếu lộ, chạy hàm taoMaBiMat trong Apps Script để đổi mã. Không nhập số thẻ, số tài khoản vào app.</p>`;
 }
 function luuDT() {
@@ -1123,18 +1223,173 @@ function luuDT() {
   ghi([{bang:'CaiDat', r:{khoa:'doiTuong', giaTri:[...new Set(ds)].join(',')}}]); toast('Đã lưu');
 }
 function ngatKetNoi() {
-  ['stc_api', 'stc_key', 'stc_cache', 'stc_url', 'stc_viCuoi'].forEach(ls.del);
+  [PF + 'api', PF + 'key', PF + 'cache', PF + 'url', PF + 'viCuoi'].forEach(ls.del);
   history.replaceState(null, '', location.pathname); location.reload();
 }
+
+// ---------- Trả góp thẻ tín dụng ----------
+const macDinhTG = () => ({bat:false, soKy:6, laiThang:0, phiCD:0, cachGhi:'theoky'});
+function kyTG(t, k) {                       // ngày đến hạn kỳ k: theo ngày đến hạn thẻ (nếu có), không thì theo ngày mua
+  const d = new Date(t.ngayMua + 'T00:00:00'), v = viTheoTen(t.vi), ngay = v && v.ngayTT ? +v.ngayTT : d.getDate();
+  const y = d.getFullYear(), m = d.getMonth() + k, cuoi = new Date(y, m + 1, 0).getDate();
+  return ymd(new Date(y, m, Math.min(ngay, cuoi)));
+}
+function tinhTG(t) {
+  const n = Math.max(1, Math.round(t.soKy) || 1), goc = +t.soTien || 0, daGhi = Math.min(n, t.daGhi || 0);
+  const gocKy = Math.floor(goc / n), laiKy = Math.round(goc * (+t.laiThang || 0) / 100), phi = Math.round(goc * (+t.phiCD || 0) / 100);
+  const xong = t.trangThai === 'xong';
+  const gocDaTra = daGhi >= n ? goc : daGhi * gocKy;
+  return {n, gocKy, laiKy, phi, moiKy: gocKy + laiKy, tongLai: laiKy * n, tongTra: goc + laiKy * n + phi,
+    gocConLai: xong ? 0 : goc - gocDaTra, kyTiep: !xong && daGhi < n ? kyTG(t, daGhi + 1) : ''};
+}
+// Gốc trả góp chưa vào sao kê (chỉ kiểu "chia theo tháng"; kiểu "ghi ngay" đã nằm trong dư nợ thẻ)
+const gocTGChoThe = ten => tong(S.db.TraGop.filter(t => t.vi === ten && t.cachGhi !== 'ngay'), t => tinhTG(t).gocConLai);
+function dmLai() { return (S.db.DanhMuc.find(d => d.ten === 'Lãi vay & phí') || dsDM('chi').find(d => /phí|lãi/i.test(d.ten)) || dsDM('chi')[0] || {}).ten || ''; }
+function khoiTG() {
+  const t = G.tg || (G.tg = macDinhTG());
+  let h = `<div class="tgbox"><div class="hd"><span>🧾 Mua trả góp qua thẻ</span><button class="sw ${t.bat ? 'on' : ''}" onclick="batTG()" aria-label="Bật trả góp"></button></div>`;
+  if (t.bat) {
+    h += `<div class="chips">${[3, 6, 9, 12, 18, 24, 36].map(k => `<button class="chip ${t.soKy === k ? 'on' : ''}" onclick="docTG();G.tg.soKy=${k};veFormGD()">${k} tháng</button>`).join('')}</div>
+      <div class="tgrow"><label>Lãi %/tháng (0 nếu 0%)<input id="tg_lai" inputmode="decimal" value="${t.laiThang || ''}" placeholder="0" oninput="docTG();tomTatTG()"></label>
+      <label>Phí chuyển đổi % (1 lần)<input id="tg_phi" inputmode="decimal" value="${t.phiCD || ''}" placeholder="0" oninput="docTG();tomTatTG()"></label></div>
+      <div class="seg" style="margin:8px 0 0"><button class="${t.cachGhi !== 'ngay' ? 'on' : ''}" onclick="docTG();G.tg.cachGhi='theoky';veFormGD()">Chi phí chia theo tháng</button>
+      <button class="${t.cachGhi === 'ngay' ? 'on' : ''}" onclick="docTG();G.tg.cachGhi='ngay';veFormGD()">Ghi toàn bộ ngay</button></div>
+      <div class="tgsum" id="tg_sum"></div>`;
+  }
+  return h + '</div>';
+}
+function batTG() { docGD(); docTG(); G.tg.bat = !G.tg.bat; veFormGD(); }
+function docTG() {
+  if (!G.tg) G.tg = macDinhTG();
+  const n = id => { const el = $(id); return el ? Math.max(0, +String(el.value).replace(',', '.') || 0) : null; };
+  const l = n('#tg_lai'), p = n('#tg_phi'); if (l !== null) G.tg.laiThang = l; if (p !== null) G.tg.phiCD = p;
+  const st = $('#g_soTien'); if (st) G.soTien = docSoTien(st.value);
+}
+function tomTatTG() {
+  const el = $('#tg_sum'); if (!el || !G.tg || !G.tg.bat) return;
+  const goc = docSoTien(($('#g_soTien') || {}).value) || G.soTien;
+  if (!goc) { el.innerHTML = 'Nhập giá món hàng ở ô số tiền phía trên.'; return; }
+  const c = tinhTG({soTien:goc, soKy:G.tg.soKy, laiThang:G.tg.laiThang, phiCD:G.tg.phiCD, daGhi:0, ngayMua:G.ngay || homNay(), vi:G.vi});
+  el.innerHTML = `Mỗi tháng trả <b>${fmt(c.moiKy)} đ</b> × ${c.n} kỳ (kỳ đầu ${ddmm(c.kyTiep)})<br>
+    Tổng lãi ${fmt(c.tongLai)} đ · phí ${fmt(c.phi)} đ · <b>tổng phải trả ${fmt(c.tongTra)} đ</b><br>
+    <span class="mu">${G.tg.cachGhi === 'ngay' ? 'Ghi chi tiêu toàn bộ giá trị ngay hôm nay; hằng tháng chỉ ghi thêm tiền lãi (nếu có).' : 'Mỗi tháng ghi một khoản chi bằng tiền gốc kỳ đó (+ lãi), đúng như số tiền trên sao kê.'}</span>`;
+}
+function taoTG(r, tiep) {
+  const t = G.tg, id = uid(), ts = new Date().toISOString();
+  const tg = {id, ten:r.ghiChu || r.danhMuc, vi:r.vi, ngayMua:r.ngay, soTien:r.soTien, soKy:t.soKy, laiThang:t.laiThang || 0, phiCD:t.phiCD || 0,
+    cachGhi:t.cachGhi, danhMuc:r.danhMuc, doiTuong:r.doiTuong || 'Chung', daGhi:0, trangThai:'', ghiChu:''};
+  const c = tinhTG(tg), ds = [{bang:'TraGop', r:tg}];
+  if (t.cachGhi === 'ngay') ds.push({bang:'GiaoDich', r:{...r, lienKet:id, ghiChu:(r.ghiChu || r.danhMuc) + ' (trả góp ' + c.n + ' tháng)'}});
+  if (c.phi > 0) ds.push({bang:'GiaoDich', r:{id:uid(), ngay:r.ngay, loai:'chi', soTien:c.phi, danhMuc:dmLai(), vi:r.vi, viDen:'', doiTuong:tg.doiTuong, lienKet:id,
+    ghiChu:'Phí chuyển đổi trả góp: ' + tg.ten, taoLuc:ts}});
+  ghi(ds);
+  toast('Đã tạo trả góp ' + c.n + ' tháng · mỗi kỳ ' + fmtTat(c.moiKy));
+  if (tiep) moGD(null, {ngay:r.ngay, vi:r.vi}); else dongSheet();
+}
+function ghiKyTG(id) {
+  const t = S.db.TraGop.find(x => x.id === id); if (!t) return;
+  const c = tinhTG(t), k = (t.daGhi || 0) + 1; if (k > c.n || t.trangThai === 'xong') return;
+  const ngay = kyTG(t, k), ts = new Date().toISOString(), ds = [];
+  const goc = k === c.n ? t.soTien - c.gocKy * (c.n - 1) : c.gocKy;
+  if (t.cachGhi !== 'ngay') ds.push({bang:'GiaoDich', r:{id:uid(), ngay, loai:'chi', soTien:goc, danhMuc:t.danhMuc, vi:t.vi, viDen:'', doiTuong:t.doiTuong, lienKet:id,
+    ghiChu:`Trả góp ${t.ten} – kỳ ${k}/${c.n}`, taoLuc:ts}});
+  if (c.laiKy > 0) ds.push({bang:'GiaoDich', r:{id:uid(), ngay, loai:'chi', soTien:c.laiKy, danhMuc:dmLai(), vi:t.vi, viDen:'', doiTuong:t.doiTuong, lienKet:id,
+    ghiChu:`Lãi trả góp ${t.ten} – kỳ ${k}/${c.n}`, taoLuc:ts}});
+  ds.push({bang:'TraGop', r:{...t, daGhi:k, trangThai:k >= c.n ? 'xong' : ''}});
+  ghi(ds); toast(`Đã ghi kỳ ${k}/${c.n}` + (k >= c.n ? ' – hoàn tất trả góp 🎉' : ''));
+  if ($('#sheet').classList.contains('open') && $('#shTitle').textContent === t.ten) moTG(id);
+}
+function dongTG(t) {
+  const c = tinhTG(t), xong = t.trangThai === 'xong', p = (t.daGhi || 0) / c.n * 100;
+  return `<button class="it" onclick="moTG('${esc(t.id)}')"><span class="ic" style="background:#f43f5e22">🧾</span><span class="m"><b>${esc(t.ten)}${xong ? '<span class="tag grn">Xong</span>' : ''}</b>
+    <small>Kỳ ${t.daGhi || 0}/${c.n} · ${fmtTat(c.moiKy)}/tháng${+t.laiThang ? ' · lãi ' + t.laiThang + '%' : ' · 0%'}${c.kyTiep ? ' · kỳ tới ' + c.kyTiep.slice(8) + '/' + c.kyTiep.slice(5, 7) : ''}</small>
+    ${xong ? '' : `<div class="bar"><i style="width:${p}%"></i></div>`}</span><span class="a">${xong ? '' : fmt(c.gocConLai)}<small>${xong ? '' : 'gốc còn'}</small></span></button>`;
+}
+function vTraGop() {
+  const dang = S.db.TraGop.filter(t => t.trangThai !== 'xong'), xong = S.db.TraGop.filter(t => t.trangThai === 'xong');
+  const the = dsVi().find(v => v.loai === 'tindung');
+  let h = `<div class="hero" style="padding:16px 20px"><small>Gốc trả góp còn phải trả</small><div class="big" style="font-size:30px;margin-bottom:6px">${fmt(tong(dang, t => tinhTG(t).gocConLai))} đ</div>
+    <small>${dang.length} khoản đang trả · mỗi tháng ≈ ${fmtTat(tong(dang, t => tinhTG(t).moiKy))}</small></div>
+    <div class="btns"><button class="btn pri" onclick="moGD(null,{loai:'chi',vi:'${esc(the ? the.ten : '')}',tg:{...macDinhTG(),bat:true}})">+ Mua trả góp mới</button></div>`;
+  h += `<div class="list">${dang.length ? dang.map(dongTG).join('') : '<div class="empty">Chưa có khoản trả góp</div>'}</div>`;
+  if (xong.length) h += `<div class="dh"><span>Đã hoàn tất</span></div><div class="list">${xong.map(dongTG).join('')}</div>`;
+  return h + `<p class="note"><b>Chia theo tháng</b> (khuyên dùng): mỗi kỳ ghi một khoản chi đúng số tiền trên sao kê, ngân sách tháng phản ánh đúng.
+    <b>Ghi toàn bộ ngay</b>: tính hết giá trị món hàng vào tháng mua. Lãi và phí luôn ghi vào danh mục “Lãi vay & phí”. Nói nhanh: “mua tủ lạnh 12 triệu trả góp 6 tháng apple pay”.</p>`;
+}
+function moTG(id) {
+  const t = S.db.TraGop.find(x => x.id === id); if (!t) return dongSheet();
+  const c = tinhTG(t), xong = t.trangThai === 'xong';
+  let h = `<div class="grp">${kv('Thẻ', esc(t.vi))}${kv('Ngày mua', ddmm(t.ngayMua))}${kv('Giá món hàng', fmt(t.soTien))}${kv('Số kỳ', c.n + ' tháng')}
+    ${kv('Lãi', +t.laiThang ? t.laiThang + '%/tháng · ' + fmt(c.laiKy) + '/kỳ' : '0%')}${kv('Phí chuyển đổi', c.phi ? fmt(c.phi) + ' (' + t.phiCD + '%)' : '0')}
+    ${kv('Mỗi kỳ trả', '<b>' + fmt(c.moiKy) + '</b>')}${kv('Tổng phải trả', fmt(c.tongTra))}${kv('Đã ghi', (t.daGhi || 0) + '/' + c.n + ' kỳ')}
+    ${kv('Gốc còn lại', fmt(c.gocConLai))}${c.kyTiep ? kv('Kỳ tiếp theo', ddmm(c.kyTiep)) : ''}${kv('Cách ghi chi phí', t.cachGhi === 'ngay' ? 'Ghi toàn bộ ngay' : 'Chia theo tháng')}</div>`;
+  const lk = sapXepGD(S.db.GiaoDich.filter(g => g.lienKet === id));
+  if (lk.length) h += `<div class="lbl">Đã ghi</div><div class="list">${lk.map(dongGD).join('')}</div>`;
+  const nut = [{t:'Xóa', c:'del', xoa:true, fn:() => { ghi([{bang:'TraGop', r:{id}, xoa:true}, ...lk.map(g => ({bang:'GiaoDich', r:{id:g.id}, xoa:true}))]); dongSheet(); toast('Đã xóa khoản trả góp'); }}];
+  if (!xong) nut.push({t:'Tất toán sớm', fn:() => tatToanTG(id)}, {t:'Ghi kỳ ' + ((t.daGhi || 0) + 1), c:'pri', fn:() => ghiKyTG(id)});
+  moSheet(t.ten, h, nut);
+}
+function tatToanTG(id) {
+  const t = S.db.TraGop.find(x => x.id === id), c = tinhTG(t);
+  moForm('Tất toán trước hạn', [{k:'phi', l:'Phí tất toán (nếu có)', t:'money'}, {k:'ngay', l:'Ngày', t:'date'}], {phi:0, ngay:homNay()}, o => {
+    const ts = new Date().toISOString(), ds = [];
+    if (t.cachGhi !== 'ngay' && c.gocConLai > 0) ds.push({bang:'GiaoDich', r:{id:uid(), ngay:o.ngay, loai:'chi', soTien:c.gocConLai, danhMuc:t.danhMuc, vi:t.vi, viDen:'',
+      doiTuong:t.doiTuong, lienKet:id, ghiChu:'Tất toán trả góp: ' + t.ten, taoLuc:ts}});
+    if (o.phi > 0) ds.push({bang:'GiaoDich', r:{id:uid(), ngay:o.ngay, loai:'chi', soTien:o.phi, danhMuc:dmLai(), vi:t.vi, viDen:'', doiTuong:t.doiTuong, lienKet:id,
+      ghiChu:'Phí tất toán trả góp: ' + t.ten, taoLuc:ts}});
+    ds.push({bang:'TraGop', r:{...t, trangThai:'xong'}});
+    ghi(ds); toast('Đã tất toán'); moTG(id); return false;
+  }, [], t.cachGhi !== 'ngay' ? `Gốc còn lại ${fmt(c.gocConLai)} đ sẽ được ghi thành một khoản chi trên thẻ.` : 'Giá trị món hàng đã được ghi từ ngày mua; chỉ ghi thêm phí (nếu có).');
+}
+
+// ---------- Chế độ dữ liệu thử (chỉ lưu trên máy, không gọi Google Sheet) ----------
+function demoDb() { try { return JSON.parse(ls.get(PF + 'demo') || 'null') || {}; } catch (e) { return {}; } }
+function demoGoi(fn, args) {
+  const db = demoDb(); BANG.forEach(b => db[b] = db[b] || []);
+  const xong = v => new Promise(r => setTimeout(() => r(v), 250));
+  if (fn === 'layDuLieu') return xong({...db, url:''});
+  if (fn === 'luu') {
+    args[0].forEach(c => { const arr = db[c.bang], key = c.bang === 'CaiDat' ? 'khoa' : 'id', i = arr.findIndex(x => x[key] === c.r[key]);
+      if (c.xoa) { if (i >= 0) arr.splice(i, 1); } else if (i >= 0) arr[i] = {...c.r}; else arr.push({...c.r}); });
+    ls.set(PF + 'demo', JSON.stringify(db)); return xong(true);
+  }
+  if (fn === 'doiTen') {
+    const [loai, cu, moi] = args, cot = loai === 'vi' ? ['vi', 'viDen'] : ['danhMuc'];
+    ['GiaoDich', 'DinhKy'].forEach(b => db[b].forEach(x => cot.forEach(c => { if (x[c] === cu) x[c] = moi; })));
+    ls.set(PF + 'demo', JSON.stringify(db)); return xong(0);
+  }
+  return Promise.reject(new Error('Yêu cầu không hợp lệ'));
+}
+function batDemo() { ls.set(PF + 'api', 'demo'); ls.set(PF + 'key', 'demo'); history.replaceState(null, '', location.pathname); khoiDong(); }
+function napMau() {
+  const vi = t => (dsVi().find(v => v.loai === t) || dsVi()[0] || {}).ten || '';
+  const mau = [['Ăn uống', 45000, 'Ăn trưa', 'tindung'], ['Ăn uống', 650000, 'Siêu thị', 'tindung'], ['Đi lại', 80000, 'Đổ xăng', 'tienmat'],
+    ['Con cái', 450000, 'Sữa', 'tindung'], ['Hóa đơn nhà cửa', 1250000, 'Tiền điện', 'nganhang'], ['Mua sắm', 520000, 'Quần áo', 'tindung'],
+    ['Y tế', 180000, 'Thuốc', 'tienmat'], ['Giải trí & du lịch', 900000, 'Nhà hàng', 'tindung'], ['Học tập', 2500000, 'Học phí', 'nganhang']];
+  const ds = [], d0 = new Date();
+  for (let m = 0; m < 3; m++) {
+    const thang = new Date(d0.getFullYear(), d0.getMonth() - m, 1), soNgay = m ? 28 : Math.max(1, d0.getDate());
+    const ngay = n => ymd(new Date(thang.getFullYear(), thang.getMonth(), Math.min(n, soNgay)));
+    ds.push({bang:'GiaoDich', r:{id:uid(), ngay:ngay(1), loai:'thu', soTien:18500000, danhMuc:'Lương', vi:vi('nganhang'), viDen:'', doiTuong:'Chung', lienKet:'', ghiChu:'Lương', taoLuc:new Date().toISOString()}});
+    for (let i = 0; i < 14; i++) { const x = mau[(i * 7 + m) % mau.length];
+      ds.push({bang:'GiaoDich', r:{id:uid(), ngay:ngay(1 + (i * 2) % 28), loai:'chi', soTien:Math.round(x[1] * (0.7 + ((i * 37 + m * 11) % 60) / 100) / 1000) * 1000, danhMuc:x[0],
+        vi:vi(x[3]), viDen:'', doiTuong:x[0] === 'Con cái' || x[0] === 'Học tập' ? 'Con lớn' : 'Chung', lienKet:'', ghiChu:x[2], taoLuc:new Date().toISOString()}}); }
+  }
+  dsVi().forEach(v => { const du = {tienmat:5000000, nganhang:60000000}[v.loai]; if (du && !v.soDuDau) ds.push({bang:'Vi', r:{...v, soDuDau:du}}); });
+  ghi(ds); toast('Đã nạp ' + ds.length + ' giao dịch mẫu');
+}
+function xoaDemo() { ls.del(PF + 'demo'); ls.del(PF + 'cache'); ls.del(PF + 'khongThe'); BANG.forEach(b => S.db[b] = []); tai().then(() => toast('Đã xóa dữ liệu thử')); }
 
 // ---------- Khởi động ----------
 function khoiDong() {
   S.thang = homNay().slice(0, 7);
+  if (BETA) { document.title = 'Sổ TC Beta'; const m = document.querySelector('meta[name="apple-mobile-web-app-title"]'); if (m) m.content = 'Sổ TC Beta'; }
   if (!docCauHinh()) { $('#setup').classList.remove('hidden'); $('#app').classList.add('hidden'); return; }
   $('#setup').classList.add('hidden'); $('#app').classList.remove('hidden');
-  try { const c = JSON.parse(ls.get('stc_cache') || 'null'); if (c) { napDuLieu(c); S.url = ls.get('stc_url') || ''; ve(); } } catch (e) {}
+  try { const c = JSON.parse(ls.get(PF + 'cache') || 'null'); if (c) { napDuLieu(c); S.url = ls.get(PF + 'url') || ''; ve(); } } catch (e) {}
   tai();
 }
+window.addEventListener('scroll', () => { const t = $('.top'); if (t) t.classList.toggle('cuon', window.scrollY > 4); }, {passive:true});
 document.addEventListener('visibilitychange', () => { if (!document.hidden && CFG.key && !dangLuu) tai(); });
 khoiDong();
 </script>
