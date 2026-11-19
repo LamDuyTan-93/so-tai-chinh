@@ -262,7 +262,7 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
    ===================================================================== */
 const BETA = /\/beta\//.test(location.pathname);       // bản thử nghiệm chạy ở thư mục /beta/
 const PF = BETA ? 'stcb_' : 'stc_';                         // tách bộ nhớ trên máy giữa bản chính và bản beta
-const PHIEN_BAN = '2.4' + (BETA ? '-beta' : '');
+const PHIEN_BAN = '2.5' + (BETA ? '-beta' : '');
 const SVG_MIC = '<svg class="i" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5"/></svg>';
 
 // ---------- Hằng số ----------
@@ -760,7 +760,7 @@ function veFormGD(vTxt) {
   if (g.loai !== 'chuyen') h += `<div class="lbl">Dành cho</div><div class="chips">${dsDoiTuong().map(t => `<button class="chip ${t === (g.doiTuong || 'Chung') ? 'on' : ''}" data-f="doiTuong" data-v="${esc(t)}" onclick="chonChip(this)">${t === 'Chung' ? '👨‍👩‍👧‍👦' : '👤'} ${esc(t)}</button>`).join('')}</div>`;
   const laThe = (viTheoTen(g.vi) || {}).loai === 'tindung';
   if (Gmoi && g.loai === 'chi' && laThe) h += khoiTG();
-  h += `<div class="grp"><label class="fl"><span>Ngày</span><input id="g_ngay" type="date" value="${esc(g.ngay)}"></label>
+  h += `<div class="grp"><label class="fl"><span>${G.tg && G.tg.bat && G.tg.dangTra ? 'Ngày mua ban đầu' : 'Ngày'}</span><input id="g_ngay" type="date" value="${esc(g.ngay)}" onchange="tomTatTG()"></label>
     <label class="fl"><span>Ghi chú</span><input id="g_ghiChu" autocomplete="off" placeholder="Không bắt buộc" value="${esc(g.ghiChu)}"></label></div>`;
   $('#gdForm').innerHTML = h; coGian($('#g_soTien')); tomTatTG();
 }
@@ -1228,7 +1228,7 @@ function ngatKetNoi() {
 }
 
 // ---------- Trả góp thẻ tín dụng ----------
-const macDinhTG = () => ({bat:false, soKy:6, laiThang:0, phiCD:0, cachGhi:'theoky'});
+const macDinhTG = () => ({bat:false, soKy:6, laiThang:0, phiCD:0, cachGhi:'theoky', dangTra:false, daTra:0});
 function kyTG(t, k) {                       // ngày đến hạn kỳ k: theo ngày đến hạn thẻ (nếu có), không thì theo ngày mua
   const d = new Date(t.ngayMua + 'T00:00:00'), v = viTheoTen(t.vi), ngay = v && v.ngayTT ? +v.ngayTT : d.getDate();
   const y = d.getFullYear(), m = d.getMonth() + k, cuoi = new Date(y, m + 1, 0).getDate();
@@ -1249,11 +1249,15 @@ function khoiTG() {
   const t = G.tg || (G.tg = macDinhTG());
   let h = `<div class="tgbox"><div class="hd"><span>🧾 Mua trả góp qua thẻ</span><button class="sw ${t.bat ? 'on' : ''}" onclick="batTG()" aria-label="Bật trả góp"></button></div>`;
   if (t.bat) {
+    h += `<div class="seg" style="margin:10px 0 0"><button class="${!t.dangTra ? 'on' : ''}" onclick="docTG();G.tg.dangTra=false;veFormGD()">Mua mới</button>
+      <button class="${t.dangTra ? 'on' : ''}" onclick="docTG();G.tg.dangTra=true;G.tg.cachGhi='theoky';veFormGD()">Đang trả dở</button></div>`;
+    if (t.dangTra) h += `<p class="note" style="margin:8px 0 0">Nhập <b>giá gốc</b> món hàng ở ô số tiền, <b>ngày mua ban đầu</b> ở ô Ngày bên dưới, và số kỳ đã trả. App chỉ theo dõi các kỳ còn lại, không ghi lại các kỳ đã qua.</p>`;
     h += `<div class="chips">${[3, 6, 9, 12, 18, 24, 36].map(k => `<button class="chip ${t.soKy === k ? 'on' : ''}" onclick="docTG();G.tg.soKy=${k};veFormGD()">${k} tháng</button>`).join('')}</div>
       <div class="tgrow"><label>Lãi %/tháng (0 nếu 0%)<input id="tg_lai" inputmode="decimal" value="${t.laiThang || ''}" placeholder="0" oninput="docTG();tomTatTG()"></label>
-      <label>Phí chuyển đổi % (1 lần)<input id="tg_phi" inputmode="decimal" value="${t.phiCD || ''}" placeholder="0" oninput="docTG();tomTatTG()"></label></div>
-      <div class="seg" style="margin:8px 0 0"><button class="${t.cachGhi !== 'ngay' ? 'on' : ''}" onclick="docTG();G.tg.cachGhi='theoky';veFormGD()">Chi phí chia theo tháng</button>
-      <button class="${t.cachGhi === 'ngay' ? 'on' : ''}" onclick="docTG();G.tg.cachGhi='ngay';veFormGD()">Ghi toàn bộ ngay</button></div>
+      ${t.dangTra ? `<label>Đã trả (số kỳ)<input id="tg_daTra" inputmode="numeric" value="${t.daTra || ''}" placeholder="0" oninput="docTG();tomTatTG()"></label>`
+        : `<label>Phí chuyển đổi % (1 lần)<input id="tg_phi" inputmode="decimal" value="${t.phiCD || ''}" placeholder="0" oninput="docTG();tomTatTG()"></label>`}</div>
+      ${t.dangTra ? '' : `<div class="seg" style="margin:8px 0 0"><button class="${t.cachGhi !== 'ngay' ? 'on' : ''}" onclick="docTG();G.tg.cachGhi='theoky';veFormGD()">Chi phí chia theo tháng</button>
+      <button class="${t.cachGhi === 'ngay' ? 'on' : ''}" onclick="docTG();G.tg.cachGhi='ngay';veFormGD()">Ghi toàn bộ ngay</button></div>`}
       <div class="tgsum" id="tg_sum"></div>`;
   }
   return h + '</div>';
@@ -1262,23 +1266,42 @@ function batTG() { docGD(); docTG(); G.tg.bat = !G.tg.bat; veFormGD(); }
 function docTG() {
   if (!G.tg) G.tg = macDinhTG();
   const n = id => { const el = $(id); return el ? Math.max(0, +String(el.value).replace(',', '.') || 0) : null; };
-  const l = n('#tg_lai'), p = n('#tg_phi'); if (l !== null) G.tg.laiThang = l; if (p !== null) G.tg.phiCD = p;
+  const l = n('#tg_lai'), p = n('#tg_phi'), d = n('#tg_daTra'); if (l !== null) G.tg.laiThang = l; if (p !== null) G.tg.phiCD = p;
+  if (d !== null) G.tg.daTra = Math.round(d);
+  const ng = $('#g_ngay'); if (ng && ng.value) G.ngay = ng.value;
   const st = $('#g_soTien'); if (st) G.soTien = docSoTien(st.value);
 }
 function tomTatTG() {
   const el = $('#tg_sum'); if (!el || !G.tg || !G.tg.bat) return;
   const goc = docSoTien(($('#g_soTien') || {}).value) || G.soTien;
   if (!goc) { el.innerHTML = 'Nhập giá món hàng ở ô số tiền phía trên.'; return; }
-  const c = tinhTG({soTien:goc, soKy:G.tg.soKy, laiThang:G.tg.laiThang, phiCD:G.tg.phiCD, daGhi:0, ngayMua:G.ngay || homNay(), vi:G.vi});
+  const ngay = ($('#g_ngay') || {}).value || G.ngay || homNay();
+  if (G.tg.dangTra) {
+    const da = Math.min(G.tg.daTra || 0, G.tg.soKy), c2 = tinhTG({soTien:goc, soKy:G.tg.soKy, laiThang:G.tg.laiThang, phiCD:0, daGhi:da, ngayMua:ngay, vi:G.vi});
+    if (da >= c2.n) { el.innerHTML = '<span class="chi">Số kỳ đã trả bằng tổng số kỳ – khoản này đã xong, không cần nhập.</span>'; return; }
+    const tre = c2.kyTiep && c2.kyTiep < homNay();
+    el.innerHTML = `Đã trả <b>${da}/${c2.n}</b> kỳ · còn <b>${c2.n - da} kỳ</b>, mỗi kỳ <b>${fmt(c2.moiKy)} đ</b><br>
+      Gốc còn lại <b>${fmt(c2.gocConLai)} đ</b> · kỳ tới ${ddmm(c2.kyTiep)}${tre ? ' <span class="chi">(đã qua – kiểm tra lại ngày mua hoặc số kỳ đã trả)</span>' : ''}<br>
+      <span class="mu">Không ghi lại các kỳ đã trả. Mỗi kỳ còn lại sẽ được nhắc và ghi thành khoản chi trên thẻ.</span>`;
+    return;
+  }
+  const c = tinhTG({soTien:goc, soKy:G.tg.soKy, laiThang:G.tg.laiThang, phiCD:G.tg.phiCD, daGhi:0, ngayMua:ngay, vi:G.vi});
   el.innerHTML = `Mỗi tháng trả <b>${fmt(c.moiKy)} đ</b> × ${c.n} kỳ (kỳ đầu ${ddmm(c.kyTiep)})<br>
     Tổng lãi ${fmt(c.tongLai)} đ · phí ${fmt(c.phi)} đ · <b>tổng phải trả ${fmt(c.tongTra)} đ</b><br>
     <span class="mu">${G.tg.cachGhi === 'ngay' ? 'Ghi chi tiêu toàn bộ giá trị ngay hôm nay; hằng tháng chỉ ghi thêm tiền lãi (nếu có).' : 'Mỗi tháng ghi một khoản chi bằng tiền gốc kỳ đó (+ lãi), đúng như số tiền trên sao kê.'}</span>`;
 }
 function taoTG(r, tiep) {
   const t = G.tg, id = uid(), ts = new Date().toISOString();
-  const tg = {id, ten:r.ghiChu || r.danhMuc, vi:r.vi, ngayMua:r.ngay, soTien:r.soTien, soKy:t.soKy, laiThang:t.laiThang || 0, phiCD:t.phiCD || 0,
-    cachGhi:t.cachGhi, danhMuc:r.danhMuc, doiTuong:r.doiTuong || 'Chung', daGhi:0, trangThai:'', ghiChu:''};
+  const daTra = t.dangTra ? Math.max(0, Math.min(t.daTra || 0, t.soKy)) : 0;
+  if (t.dangTra && daTra >= t.soKy) return toast('Số kỳ đã trả bằng tổng số kỳ – khoản này đã xong', 1);
+  const tg = {id, ten:r.ghiChu || r.danhMuc, vi:r.vi, ngayMua:r.ngay, soTien:r.soTien, soKy:t.soKy, laiThang:t.laiThang || 0, phiCD:t.dangTra ? 0 : t.phiCD || 0,
+    cachGhi:t.dangTra ? 'theoky' : t.cachGhi, danhMuc:r.danhMuc, doiTuong:r.doiTuong || 'Chung', daGhi:daTra, trangThai:'', ghiChu:t.dangTra ? 'Nhập khi đã trả ' + daTra + ' kỳ' : ''};
   const c = tinhTG(tg), ds = [{bang:'TraGop', r:tg}];
+  if (t.dangTra) {
+    ghi(ds); toast('Đã thêm khoản trả góp đang trả · còn ' + (c.n - daTra) + ' kỳ');
+    if (tiep) moGD(null, {ngay:homNay(), vi:r.vi}); else dongSheet();
+    return;
+  }
   if (t.cachGhi === 'ngay') ds.push({bang:'GiaoDich', r:{...r, lienKet:id, ghiChu:(r.ghiChu || r.danhMuc) + ' (trả góp ' + c.n + ' tháng)'}});
   if (c.phi > 0) ds.push({bang:'GiaoDich', r:{id:uid(), ngay:r.ngay, loai:'chi', soTien:c.phi, danhMuc:dmLai(), vi:r.vi, viDen:'', doiTuong:tg.doiTuong, lienKet:id,
     ghiChu:'Phí chuyển đổi trả góp: ' + tg.ten, taoLuc:ts}});
@@ -1310,7 +1333,8 @@ function vTraGop() {
   const the = dsVi().find(v => v.loai === 'tindung');
   let h = `<div class="hero" style="padding:16px 20px"><small>Gốc trả góp còn phải trả</small><div class="big" style="font-size:30px;margin-bottom:6px">${fmt(tong(dang, t => tinhTG(t).gocConLai))} đ</div>
     <small>${dang.length} khoản đang trả · mỗi tháng ≈ ${fmtTat(tong(dang, t => tinhTG(t).moiKy))}</small></div>
-    <div class="btns"><button class="btn pri" onclick="moGD(null,{loai:'chi',vi:'${esc(the ? the.ten : '')}',tg:{...macDinhTG(),bat:true}})">+ Mua trả góp mới</button></div>`;
+    <div class="btns"><button class="btn pri" onclick="moGD(null,{loai:'chi',vi:'${esc(the ? the.ten : '')}',tg:{...macDinhTG(),bat:true}})">+ Mua trả góp mới</button>
+    <button class="btn" onclick="moGD(null,{loai:'chi',vi:'${esc(the ? the.ten : '')}',tg:{...macDinhTG(),bat:true,dangTra:true}})">+ Khoản đang trả dở</button></div>`;
   h += `<div class="list">${dang.length ? dang.map(dongTG).join('') : '<div class="empty">Chưa có khoản trả góp</div>'}</div>`;
   if (xong.length) h += `<div class="dh"><span>Đã hoàn tất</span></div><div class="list">${xong.map(dongTG).join('')}</div>`;
   return h + `<p class="note"><b>Chia theo tháng</b> (khuyên dùng): mỗi kỳ ghi một khoản chi đúng số tiền trên sao kê, ngân sách tháng phản ánh đúng.
